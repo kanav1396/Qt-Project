@@ -5,8 +5,11 @@
 #include<QtCore>
 #include<QFileSystemModel>
 #include<QHBoxLayout>
-//#include<QFileInfo>
-
+#include<QGraphicsView>
+#include<QFile>
+#include<QDebug>
+#include<jsonget.h>
+#include <QJsonDocument>
 namespace Ui {
 class MainWindow;
 }
@@ -25,13 +28,15 @@ private slots:
     //void on_Del_clicked();
 
     void on_treeView_clicked(const QModelIndex &index);
+    void action_on_data_get(QByteArray json_file_data);
 
 private:
     Ui::MainWindow *ui;
-    QFileSystemModel *myDir;
+    QFileSystemModel *current_directory;
     QHBoxLayout *layout;
-   // QString fBase;
-    //QFileInfo *fInfo;
+    QGraphicsView *tv_image;
+    jsonget data_get_frame;
+    QJsonDocument json_doc;
 };
 
 #endif // MAINWINDOW_H

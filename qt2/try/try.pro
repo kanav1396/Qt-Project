@@ -5,6 +5,8 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += network
+QT       += core
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,8 +15,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    jsonget.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    jsonget.h
 
 FORMS    += mainwindow.ui
+
+INCLUDE += /home/zootorg/Documents/cpr_main/include
