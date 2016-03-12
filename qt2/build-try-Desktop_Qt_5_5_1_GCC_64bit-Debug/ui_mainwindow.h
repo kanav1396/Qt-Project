@@ -13,10 +13,11 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QSplitter>
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QTreeView>
 #include <QtWidgets/QWidget>
@@ -27,11 +28,12 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
-    QGridLayout *gridLayout;
     QGridLayout *gridLayout_2;
-    QTextBrowser *textBrowser;
-    QGraphicsView *tv_cover;
+    QGridLayout *gridLayout;
+    QSplitter *splitter;
     QTreeView *treeView;
+    QTextBrowser *textBrowser;
+    QLabel *img_disp;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -48,34 +50,38 @@ public:
         MainWindow->setAutoFillBackground(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        gridLayout = new QGridLayout(centralWidget);
-        gridLayout->setSpacing(6);
-        gridLayout->setContentsMargins(11, 11, 11, 11);
-        gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        gridLayout_2 = new QGridLayout();
+        gridLayout_2 = new QGridLayout(centralWidget);
         gridLayout_2->setSpacing(6);
+        gridLayout_2->setContentsMargins(11, 11, 11, 11);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
-        textBrowser = new QTextBrowser(centralWidget);
-        textBrowser->setObjectName(QStringLiteral("textBrowser"));
-
-        gridLayout_2->addWidget(textBrowser, 0, 1, 1, 1);
-
-        tv_cover = new QGraphicsView(centralWidget);
-        tv_cover->setObjectName(QStringLiteral("tv_cover"));
-
-        gridLayout_2->addWidget(tv_cover, 1, 1, 1, 1);
-
-        treeView = new QTreeView(centralWidget);
+        gridLayout = new QGridLayout();
+        gridLayout->setSpacing(6);
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        splitter = new QSplitter(centralWidget);
+        splitter->setObjectName(QStringLiteral("splitter"));
+        splitter->setOrientation(Qt::Vertical);
+        treeView = new QTreeView(splitter);
         treeView->setObjectName(QStringLiteral("treeView"));
         treeView->setMaximumSize(QSize(16777215, 16777215));
         treeView->setRootIsDecorated(false);
+        splitter->addWidget(treeView);
+        textBrowser = new QTextBrowser(splitter);
+        textBrowser->setObjectName(QStringLiteral("textBrowser"));
+        splitter->addWidget(textBrowser);
 
-        gridLayout_2->addWidget(treeView, 0, 0, 2, 1);
+        gridLayout->addWidget(splitter, 0, 0, 1, 1);
+
+        img_disp = new QLabel(centralWidget);
+        img_disp->setObjectName(QStringLiteral("img_disp"));
+
+        gridLayout->addWidget(img_disp, 0, 1, 1, 1);
 
 
-        gridLayout->addLayout(gridLayout_2, 0, 0, 1, 1);
+        gridLayout_2->addLayout(gridLayout, 0, 0, 1, 1);
 
         MainWindow->setCentralWidget(centralWidget);
+        treeView->raise();
+        QWidget::setTabOrder(textBrowser, treeView);
 
         retranslateUi(MainWindow);
 
@@ -85,6 +91,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        img_disp->setText(QApplication::translate("MainWindow", "Image", 0));
     } // retranslateUi
 
 };

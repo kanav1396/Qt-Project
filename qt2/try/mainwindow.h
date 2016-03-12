@@ -10,6 +10,7 @@
 #include<QDebug>
 #include<jsonget.h>
 #include <QJsonDocument>
+#include<QNetworkAccessManager>
 namespace Ui {
 class MainWindow;
 }
@@ -29,14 +30,17 @@ private slots:
 
     void on_treeView_clicked(const QModelIndex &index);
     void action_on_data_get(QByteArray json_file_data);
+    void slot_netwManagerFinished(QNetworkReply *);
 
 private:
     Ui::MainWindow *ui;
     QFileSystemModel *current_directory;
     QHBoxLayout *layout;
-    QGraphicsView *tv_image;
     jsonget data_get_frame;
     QJsonDocument json_doc;
+    QJsonObject jsonObject;
+    QByteArray jpegData;
+    QNetworkAccessManager *image_get;
 };
 
 #endif // MAINWINDOW_H
