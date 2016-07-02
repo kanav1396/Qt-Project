@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "qnetworkaccessmanager.h"
 #include "QGraphicsPixmapItem"
+//#include "windows.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->treeView->hideColumn(4);
     ui->treeView->hideColumn(1);
     connect(&data_get_frame,SIGNAL(dataReadyRead(QByteArray)),this,SLOT(action_on_data_get(QByteArray)));
+   connect(image_get, SIGNAL(finished(QNetworkReply*)), this, SLOT(slot_netwManagerFinished(QNetworkReply*)));
 }
 MainWindow::~MainWindow()
 {
@@ -31,9 +33,13 @@ void MainWindow::on_treeView_clicked(const QModelIndex &index)
 
    if(file_Ext=="avi"||file_Ext=="mp4"||file_Ext=="mkv"||file_Ext=="flv")                                   //Added flv format for flash files
    {
+
        data_get_frame.make_request("http://www.omdbapi.com/?t=" + file_Base + "&y=&plot=full&r=json");
-       image_get= new QNetworkAccessManager(this);
-       connect(image_get, SIGNAL(finished(QNetworkReply*)), this, SLOT(slot_netwManagerFinished(QNetworkReply*)));
+
+      //image_get= new QNetworkAccessManager(this);
+     // Sleep(1000);
+
+       //connect(image_get, SIGNAL(finished(QNetworkReply*)), this, SLOT(slot_netwManagerFinished(QNetworkReply*)));
 
    }
 
@@ -51,11 +57,13 @@ void MainWindow::action_on_data_get(QByteArray json_file_data)
     QPixmap pixmap;
     QUrl image_url(jsonObject["Poster"].toString());
     QNetworkRequest request_image(image_url);
+
     image_get->get(request_image);
-    pixmap.loadFromData(jpegData);
-    int w = ui->img_disp->width();
-    int h = ui->img_disp->height();
-    ui->img_disp->setPixmap(pixmap);
+
+
+   // int w = ui->img_disp->width();
+    //int h = ui->img_disp->height();
+
     ui->textBrowser->setPlainText("");
     ui->textBrowser->append("Title\t\t:" + jsonObject["Title"].toString());
     ui->textBrowser->append("Year\t\t:" + jsonObject["Year"].toString());
@@ -67,14 +75,18 @@ void MainWindow::action_on_data_get(QByteArray json_file_data)
     ui->textBrowser->append("Actors\t\t:" + jsonObject["Actors"].toString());
     ui->textBrowser->append("IMDb Rating\t:" + jsonObject["imdbRating"].toString());
     ui->textBrowser->append("Plot\t\t:" + jsonObject["Plot"].toString());
+
 }
 void MainWindow::slot_netwManagerFinished(QNetworkReply *reply)
 {
 if (reply->error() != QNetworkReply::NoError) {
+ ui->img_disp->setText("Lol");
 qDebug() << "Error in" << reply->url() << ":" << reply->errorString();
 return;
 }
-jpegData = reply->readAll();
 
+jpegData = reply->readAll();
+pixmap.loadFromData(jpegData);
+ui->img_disp->setPixmap(pixmap);
 }
 

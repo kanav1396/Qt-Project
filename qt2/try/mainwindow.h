@@ -40,7 +40,8 @@ private:
     QJsonDocument json_doc;
     QJsonObject jsonObject;
     QByteArray jpegData;
-    QNetworkAccessManager *image_get;
+    QPixmap pixmap;
+    QNetworkAccessManager *image_get = new QNetworkAccessManager(this);
 };
 
 #endif // MAINWINDOW_H
